@@ -30,6 +30,8 @@ Then open:
 │   │   ├── cola2-workflow.svg
 │   │   ├── favicon.svg
 │   │   └── figures/
+│   ├── paper/
+│   │   └── paper.pdf
 │   └── videos/
 │       └── cola2-v2-motion-bgm-1080p.mp4
 ```
@@ -38,6 +40,6 @@ The `ref/` directory can be removed without affecting either language version.
 
 ## Add links later
 
-The Paper, arXiv, Code, and Model controls use the original page's disabled-link pattern. When links are ready, update each corresponding `<a class="btn is-soft" href="#">`: replace `#` with the URL, remove `is-soft`, and remove its `coming-soon-badge`.
+The arXiv, Code, and Model controls use the original page's disabled-link pattern. When links are ready, update each corresponding `<a class="btn is-soft" href="#">`: replace `#` with the URL, remove `is-soft`, and remove its `coming-soon-badge`.
 
 Also replace `note = {Paper link forthcoming}` in the BibTeX block with the final venue or arXiv metadata.
