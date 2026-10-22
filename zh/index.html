@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cola2 — 协同自适应层次化语言建模</title>
+
+  <meta name="description" content="Cola2：基于连续语义压缩与平衡离散生成的协同自适应层次化语言建模。">
+  <meta property="og:title" content="Cola2 — 协同自适应层次化语言建模">
+  <meta property="og:description" content="通过连续语义压缩与平衡离散生成实现层次化语言建模。">
+  <meta property="og:image" content="../static/images/cola2-workflow.svg">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="../static/images/cola_logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="../static/css/index.css">
+  <style>
+    body, h1, h2, h3, h4, h5 {
+      font-family: 'Inter', 'Noto Sans SC', 'Noto Sans', system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ==== 顶部导航 ==== -->
+<header class="topnav">
+  <div class="topnav-inner">
+    <a class="brand" href="#top">
+      <img src="../static/images/cola_logo.png" alt="Cola2">
+      <span><span class="accent">Cola</span>2</span>
+    </a>
+    <nav>
+      <a href="#abstract">摘要</a>
+      <a href="#method">方法</a>
+      <a href="#experiments">实验</a>
+      <a href="#scaling">扩展评测</a>
+      <a href="#summary">实验总结</a>
+      <a href="../" lang="en">EN</a>
+      <a href="#bibtex" class="is-cta">BibTeX</a>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ==== HERO ==== -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="publication-title reveal">
+      <img src="../static/images/cola_logo.png" alt="Cola2 标志" class="cola-logo">
+      <span class="accent">Cola<span style="color:var(--ink);">2</span></span>：
+      基于连续语义压缩与平衡离散生成的协同自适应层次化语言建模
+    </h1>
+
+    <p class="tagline reveal reveal-delay-1">
+      在连续空间中压缩语义，在离散空间中实现语言，并让两者协同适应。
+    </p>
+
+    <div class="authors reveal reveal-delay-2">
+      <span class="author">Hongcan Guo<sup>1,2,‡</sup>,</span>
+      <span class="author">Yian Zhao<sup>2,3</sup>,</span>
+      <span class="author">Feng Wang<sup>2</sup>,</span>
+      <span class="author">Shen Nie<sup>4</sup>,</span>
+      <span class="author">Guoqiang Wei<sup>2,‡</sup>,</span>
+      <span class="author">Yan Zeng<sup>2,†,‡</sup>,</span>
+      <span class="author">Hengshuang Zhao<sup>1,✉</sup></span>
+    </div>
+
+    <div class="affil-list reveal reveal-delay-3">
+      <span class="affil-item"><span class="sup">1</span>香港大学</span>
+      <span class="affil-item"><span class="sup">2</span>字节跳动 Seed</span>
+      <span class="affil-item"><span class="sup">3</span>北京大学</span>
+      <span class="affil-item"><span class="sup">4</span>中国人民大学</span>
+    </div>
+
+    <div class="notes reveal reveal-delay-3">
+      <span class="sup">†</span>项目负责人&nbsp;·&nbsp;
+      <span class="sup">‡</span>主要贡献者&nbsp;·&nbsp;
+      <span class="sup">✉</span>通讯作者
+    </div>
+
+    <div class="team-badge reveal reveal-delay-3">
+      <span class="star" aria-hidden="true">★</span>
+      <span>Seedance 团队研究项目</span>
+      <span class="star" aria-hidden="true">★</span>
+    </div>
+
+    <div class="publication-links reveal reveal-delay-4">
+      <a class="btn is-soft" href="#" aria-disabled="true">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+        <span>论文</span>
+        <span class="coming-soon-badge">Soon</span>
+      </a>
+      <a class="btn is-soft" href="#" aria-disabled="true">
+        <span class="icon"><i class="ai ai-arxiv"></i></span>
+        <span>arXiv</span>
+        <span class="coming-soon-badge">Soon</span>
+      </a>
+      <a class="btn is-soft" href="#" aria-disabled="true">
+        <span class="icon"><i class="fab fa-github"></i></span>
+        <span>代码</span>
+        <span class="coming-soon-badge">Soon</span>
+      </a>
+      <a class="btn is-soft" href="#" aria-disabled="true">
+        <span class="icon">🤗</span>
+        <span>模型</span>
+        <span class="coming-soon-badge">Soon</span>
+      </a>
+      <a class="btn" href="#bibtex">
+        <span class="icon"><i class="fas fa-quote-left"></i></span>
+        <span>BibTeX</span>
+      </a>
+    </div>
+
+    <figure class="cola-figure reveal" style="margin:2.8rem auto 0;">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        preload="metadata"
+        aria-label="Cola2 项目概览视频"
+        style="display:block; width:100%; border-radius:14px; background:#000; box-shadow:var(--shadow-2);">
+        <source src="../static/videos/cola2-v2-motion-bgm-1080p.mp4" type="video/mp4">
+        当前浏览器不支持 MP4 视频播放。
+      </video>
+      <figcaption><b>Cola2 项目概览。</b></figcaption>
+      <div class="publication-links" style="margin-top:1rem;">
+        <a class="btn" href="../static/videos/cola2-v2-motion-bgm-1080p.mp4" download="cola2-v2-motion-bgm-1080p.mp4">
+          <span class="icon"><i class="fas fa-download"></i></span>
+          <span>下载视频</span>
+        </a>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ==== 摘要 ==== -->
+<section class="section" id="abstract">
+  <div class="container narrow">
+    <div class="section-heading reveal">
+      <span class="eyebrow">摘要</span>
+      <h2>连续语义与离散生成的协同适应</h2>
+    </div>
+
+    <div class="abstract-block reveal">
+      <p>
+        层次化语言生成将连续语义建模与离散文本实现分离，但其有效性取决于两个关键问题：
+        潜空间应当压缩什么信息，以及离散生成器应当如何利用这些信息。我们提出 <b>Cola2</b>，
+        联合研究连续语义压缩、离散重建—生成平衡及二者的协同适应。Cola2 将文本动态切分为语义片段，
+        通过无需辅助损失的负反馈机制控制压缩率，并结合重建与生成监督，学习紧凑且具有预测能力的潜表示。
+      </p>
+      <p>
+        块因果掩码扩散模型（MDM）解码器在干净、加噪和丢弃潜变量三种条件下联合训练，
+        并通过无分类器引导（CFG）调节语义重建与自主生成之间的平衡。训练时，token 预测梯度通过潜变量更新编码器，
+        推动连续表示与离散生成协同适应；Flow Matching 的先验学习则通过 stop-gradient 与表示学习解耦。
+        推理时，模型在固定片段布局下对生成文本重新编码，使潜变量历史与实际文本上下文保持一致。
+      </p>
+      <p>
+        在五个下游任务上开展的系统组件分析和约 <b>210B 训练 tokens</b> 的受控比较验证了核心设计，
+        并展现出具有竞争力且尚未饱和的扩展趋势。仅使用 <b>346.03B 源 tokens</b> 时，
+        尚未收敛的 checkpoint 即达到 <b>60.10 的八任务平均分</b>，并在 HellaSwag 和 StoryCloze
+        上超过 Llama-3-8B，而后者报告的预训练预算高出 <b>43 倍以上</b>。
+      </p>
+      <p>
+        这些结果表明，Qwen 初始化的因果解码器生成能力得到了有效迁移，层次化语言生成仍具有显著的扩展空间。
+        更广泛地说，连续潜变量层次化建模能够与成熟的 token 空间生成范式有效结合，包括自回归和掩码扩散解码器。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==== 方法 ==== -->
+<section class="section is-soft" id="method">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">方法</span>
+      <h2>Cola2 整体流程</h2>
+      <p class="lead">
+        压缩后的连续潜变量先验负责组织语义；具备生成能力的 token 空间解码器负责实现语义并补全剩余细节。
+      </p>
+    </div>
+
+    <figure class="cola-figure reveal">
+      <img
+        src="../static/images/cola2-workflow.svg"
+        alt="Cola2 方法总览：压缩 VAE、平衡离散解码器、解耦的潜变量 DiT 训练和分块推理。"
+        loading="lazy"
+        style="width:min(100%, 1000px);">
+      <figcaption>
+        <b>论文方法总览。</b>阶段 1 联合训练压缩编码器与重建—生成平衡解码器；
+        阶段 2 在 detached 潜变量上额外训练 DiT；推理时 DiT 分块生成潜变量，再由解码器实现为 token。
+      </figcaption>
+    </figure>
+
+    <div class="method-tldr">
+      <div class="stage reveal reveal-delay-1">
+        <span class="stage-tag">阶段 1</span>
+        <h4>语义压缩</h4>
+        <p>动态分段依据内容分配潜变量位置；无梯度的反馈控制器在不干扰表示学习的前提下维持目标平均压缩率。</p>
+      </div>
+      <div class="stage reveal reveal-delay-2">
+        <span class="stage-tag">阶段 2</span>
+        <h4>解耦的潜变量先验</h4>
+        <p>块因果 DiT 通过 Flow Matching 拟合在线潜变量分布；其梯度在编码器处停止，而 token 侧梯度继续塑造表示。</p>
+      </div>
+      <div class="stage reveal reveal-delay-3">
+        <span class="stage-tag">推理</span>
+        <h4>提出 → 解码 → 重编码</h4>
+        <p>DiT 提出潜变量块，解码器生成 token，再按固定片段布局重编码，使潜变量历史始终与离散文本历史一致。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==== 实验 ==== -->
+<section class="section" id="experiments">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">实验</span>
+      <h2>贯穿层次结构的三个问题</h2>
+      <p class="lead">
+        我们分别研究如何构建压缩且具有预测能力的语义潜空间、如何训练连续潜变量生成器，
+        以及离散解码器应如何平衡重建与生成。
+      </p>
+    </div>
+
+    <details class="detail-block reveal" open>
+      <summary>1 · 如何构建压缩且具有预测能力的语义潜空间？</summary>
+      <div class="detail-body">
+        <div class="takeaway">
+          <b>核心结论。</b>动态语义分段与面向生成的监督缺一不可。在 2× 压缩下，最佳动态配置在
+          LAMBADA 上达到 29.4%，略高于不压缩模型；编码器与解码器协同演化并加入生成监督后达到 58.2%。
+        </div>
+        <div class="figure-grid cols-2">
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage1_latent/fig1_segmentation_and_rate_control.svg" alt="动态分段与压缩率控制对比。" loading="lazy">
+            <figcaption><b>分段与压缩率控制。</b>基于内容的片段优于固定和随机分组；无辅助损失反馈优于 DLCM。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage1_latent/fig2_vae_architecture.svg" alt="VAE 编码器架构与池化方式消融。" loading="lazy">
+            <figcaption><b>VAE 架构。</b>层分配比单纯增加深度更重要；片段内双向注意力效果最佳。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage1_latent/fig3_latent_width_and_max_span.svg" alt="潜变量宽度与最大片段长度消融。" loading="lazy">
+            <figcaption><b>表示容量。</b>潜变量宽度存在内部最优点，最大片段长度的影响也并非单调。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage1_latent/fig4b_span_length_distribution.svg" alt="片段长度分布。" loading="lazy">
+            <figcaption><b>片段分布。</b>提高长度上限可减少被强制截断的语义片段。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage1_latent/fig5_generative_loss_on_encoder.svg" alt="生成监督消融。" loading="lazy">
+            <figcaption><b>生成监督。</b>预测性目标与编码器—解码器协同演化相互补充。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </details>
+
+    <details class="detail-block reveal">
+      <summary>2 · 连续潜变量生成器应当如何训练？</summary>
+      <div class="detail-body">
+        <div class="takeaway">
+          <b>核心结论。</b>使用 token 侧监督持续更新 VAE，但阻断 Flow Matching 梯度进入编码器。
+          中等潜变量块大小效果最佳，噪声日程必须与表示匹配，DiT 推理在约 8 步时基本饱和。
+        </div>
+        <div class="figure-grid cols-2">
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage2_dit/fig6_vae_policy_and_noise_schedule.svg" alt="VAE 更新策略与 DiT 噪声日程结果。" loading="lazy">
+            <figcaption><b>更新策略与校准。</b>可训练 VAE 加 detached DiT 梯度效果最佳；日程必须与潜变量匹配。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage2_dit/fig8_block_size.svg" alt="DiT 块大小与模型容量结果。" loading="lazy">
+            <figcaption><b>块大小。</b>中等块大小最优，更大的 DiT 对更大块表现出更强容忍度。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage2_dit/fig9_dit_infer_steps.svg" alt="潜变量生成器 CFG 与推理步数扫描。" loading="lazy">
+            <figcaption><b>推理。</b>较强 CFG 有益，DiT 去噪在约 8 步后基本饱和。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </details>
+
+    <details class="detail-block reveal">
+      <summary>3 · 解码器应如何平衡重建与生成？</summary>
+      <div class="detail-body">
+        <div class="takeaway">
+          <b>核心结论。</b>解码器应主要在加噪和丢弃潜变量条件下训练，同时保留干净重建样本。
+          0.4 / 0.4 / 0.2 的丢弃—加噪—干净配比达到 44.7%；打乱潜变量造成最大下降，
+          说明解码器确实依赖对齐的语义内容。
+        </div>
+        <div class="figure-grid cols-2">
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage3_decoder/fig10_decoder_data_partition.svg" alt="解码器干净、加噪与丢弃条件配比。" loading="lazy">
+            <figcaption><b>数据配比。</b>0.4 / 0.4 / 0.2 的丢弃—加噪—干净混合实现最佳平衡。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage3_decoder/fig11_decoder_cfg.svg" alt="解码器 CFG 与参数分配结果。" loading="lazy">
+            <figcaption><b>引导与参数分配。</b>CFG 必须匹配训练分布；2B DiT 与 1B 解码器是最佳 3B 配比。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage3_decoder/fig12_decoder_size.svg" alt="解码器规模扩展结果。" loading="lazy">
+            <figcaption><b>解码器规模。</b>在固定 DiT 下，准确率随解码器容量单调提升。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/stage3_decoder/fig13_demask_and_latent_ablation.svg" alt="去掩码步数与潜变量消融。" loading="lazy">
+            <figcaption><b>潜变量使用。</b>8×8 步最优，打乱潜变量导致最大性能下降。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </details>
+
+    <details class="detail-block reveal">
+      <summary>4 · 随训练规模增长，性能是否继续提升？</summary>
+      <div class="detail-body">
+        <div class="takeaway">
+          <b>核心结论。</b>在约 210B tokens 的受控训练下，Cola-MDM 获得最强的整体扩展趋势。
+          压缩版 Cola2-MDM 收敛更慢，但在约 150B tokens 后仍持续缩小与 LLaDA 的差距，尚未饱和。
+        </div>
+        <div class="figure-grid cols-2">
+          <figure class="cola-figure">
+            <img src="../static/images/figures/scaling/scaling_scatter_trend.svg" alt="AR、LLaDA、Cola DLM、Cola-MDM 与 Cola2-MDM 的受控扩展趋势。" loading="lazy">
+            <figcaption><b>受控扩展。</b>压缩保留了语义任务上的强扩展趋势，潜变量 DiT 仍在持续提升。</figcaption>
+          </figure>
+          <figure class="cola-figure">
+            <img src="../static/images/figures/scaling/best_decoder_cfg_trend.svg" alt="受控扩展训练中的最优解码器 CFG 权重。" loading="lazy">
+            <figcaption><b>解码器 CFG 趋势。</b>最优值保持在 −0.9 附近，并随训练逐渐向零移动。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ==== 扩展评测 ==== -->
+<section class="section is-soft" id="scaling">
+  <div class="container">
+    <div class="section-heading reveal">
+      <span class="eyebrow">预训练后评测</span>
+      <h2>346.03B 源 tokens 下达到 60.10 平均分</h2>
+      <p class="lead">
+        独立的大规模训练路线从 Qwen3-4B-Base 初始化因果解码器。其潜变量 DiT 尚未收敛，
+        因而仍具有显著的扩展空间。
+      </p>
+    </div>
+
+    <div class="method-tldr">
+      <div class="stage reveal reveal-delay-1">
+        <span class="stage-tag">训练预算</span>
+        <h4>346.03B 源 tokens</h4>
+        <p>阶段 I 训练 VAE；阶段 II 联合更新 VAE 与约 4B 参数的潜变量 DiT；阶段 III 继续训练 DiT。</p>
+      </div>
+      <div class="stage reveal reveal-delay-2">
+        <span class="stage-tag">八任务平均</span>
+        <h4>60.10 准确率</h4>
+        <p>距离 Llama-3-8B 仅 6.15 分，而该基线报告使用了至少 15T 预训练 tokens。</p>
+      </div>
+      <div class="stage reveal reveal-delay-3">
+        <span class="stage-tag">数据效率</span>
+        <h4>&gt;43× 更少 tokens</h4>
+        <p>按报告的 token 预算比较，Cola2 在 HellaSwag 和 StoryCloze 上超过 Llama-3-8B。</p>
+      </div>
+    </div>
+
+    <div class="headline-result reveal">
+      <span class="headline-tag"><span class="star">★</span> 八任务基准</span>
+      <h3>尚未收敛时已展现竞争力</h3>
+      <p class="claim">
+        下列模型采用不同的训练配方、tokenizer 和 token 计数方式，因此该比较用于说明预训练后能力，
+        而非严格隔离生成范式的影响。
+      </p>
+
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>任务</th>
+              <th>Llama-3-8B</th>
+              <th>Qwen2.5-7B</th>
+              <th>Qwen3-8B-Base</th>
+              <th>LLaDA-8B-Base</th>
+              <th>Cola2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="row-label">预训练 tokens</td><td>15T+</td><td>18T</td><td>~36T</td><td>2.3T</td><td class="best">346B</td></tr>
+            <tr><td class="row-label">RACE</td><td>75.77</td><td>89.95</td><td>90.65</td><td>87.40</td><td>69.91</td></tr>
+            <tr><td class="row-label">NarrativeQA</td><td>42.70</td><td>32.90</td><td>37.30</td><td>36.00</td><td>32.70</td></tr>
+            <tr><td class="row-label">HellaSwag</td><td>39.21</td><td>75.67</td><td>68.13</td><td>69.65</td><td class="best">41.75</td></tr>
+            <tr><td class="row-label">StoryCloze</td><td>79.49</td><td>95.09</td><td>97.44</td><td>95.94</td><td class="best">80.42</td></tr>
+            <tr><td class="row-label">LAMBADA</td><td>75.70</td><td>71.82</td><td>71.20</td><td>67.90</td><td>63.00</td></tr>
+            <tr><td class="row-label">ARC-Easy</td><td>90.86</td><td>96.00</td><td>97.35</td><td>93.85</td><td>87.62</td></tr>
+            <tr><td class="row-label">TruthfulQA</td><td>63.04</td><td>69.03</td><td>72.58</td><td>64.87</td><td>54.10</td></tr>
+            <tr><td class="row-label">MMLU</td><td>63.19</td><td>70.16</td><td>72.31</td><td>61.27</td><td>51.32</td></tr>
+            <tr><td class="row-label"><b>八任务平均</b></td><td>66.25</td><td>75.08</td><td>75.87</td><td>72.11</td><td class="best"><b>60.10</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==== 实验总结 ==== -->
+<section class="section" id="summary">
+  <div class="container narrow">
+    <div class="section-heading reveal">
+      <span class="eyebrow">实验</span>
+      <h2>总结</h2>
+    </div>
+
+    <div class="abstract-block reveal">
+      <p>实验结果从三个方面支持 <b>Cola2</b> 的设计。</p>
+      <p>
+        <b>语义压缩：</b>动态分段与生成监督使潜变量在高压缩率下仍保持较强语义性；
+        前者在合适的 <span class="eq">L<sub>max</sub></span> 下略微超过不压缩模型，
+        后者将准确率从 <b>15.7%</b> 提升至 <b>26.7%</b>。
+      </p>
+      <p>
+        <b>重建—生成平衡：</b>以加噪和丢弃条件为主的混合训练，使解码器既能忠实使用潜变量
+        （打乱潜变量会损失 <b>12.2 分</b>），也能自主生成剩余信息。
+      </p>
+      <p>
+        <b>连续—离散协同适应：</b>潜变量中应当承载什么信息，需要由解码器共同决定；
+        联合训练编码器与解码器带来 <b>5.9 分</b>提升，并且二者都持续受益于更多训练数据，
+        使层次化模型呈现出与 AR 和 LLaDA 相当或更优的扩展趋势。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==== 局限与未来展望 ==== -->
+<section class="section is-soft">
+  <div class="container narrow">
+    <div class="section-heading reveal">
+      <span class="eyebrow">展望</span>
+      <h2>局限与未来展望</h2>
+    </div>
+    <div class="abstract-block reveal">
+      <p>
+        尽管实验初步证明了 <b>Cola2</b> 的可行性、竞争力与扩展潜力，我们仍将当前系统视为起点，
+        而非最终形态。
+      </p>
+      <p>
+        第一，模型仍远未收敛，尤其是潜变量 DiT；同时，当前训练规模受到可用资源限制。
+        因此，需要更大的模型、更长的训练以及更广泛的数据和算力预算，才能确定其性能上限。
+      </p>
+      <p>
+        第二，理论上，压缩能够降低潜变量先验中占主导的线性层和注意力 FLOPs；
+        但端到端生成速度还取决于解码器、CFG 分支、潜变量反馈和硬件利用率。
+        要将理论节省转化为实际加速，需要进行基础设施协同设计，包括专用 kernel、缓存管理和并行调度。
+      </p>
+      <p>
+        第三，<b>Cola2</b> 已经展现出与自回归和掩码扩散解码器的兼容性，
+        但它们的联合训练目标、推理权衡和最佳分工仍缺乏充分研究。
+      </p>
+      <p>
+        最后，连续潜空间可能为文本与视觉等其他连续模态提供共享接口，
+        从而为统一潜表示、跨模态先验以及统一理解与生成打开路径。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==== BIBTEX ==== -->
+<section class="section is-tight" id="bibtex">
+  <div class="container narrow">
+    <div class="section-heading reveal">
+      <span class="eyebrow">引用</span>
+      <h2>BibTeX</h2>
+      <p class="lead">论文正式编号发布后将在此更新。</p>
+    </div>
+    <div class="bibtex-block reveal">
+      <button class="copy-btn" type="button">复制</button>
+<pre>@article{guo2026cola2,
+  title  = {Cola2: Co-Adaptive Hierarchical Language Modeling
+            with Continuous Semantic Compression and
+            Balanced Discrete Generation},
+  author = {Guo, Hongcan and Zhao, Yian and Wang, Feng and Nie, Shen
+            and Wei, Guoqiang and Zeng, Yan and Zhao, Hengshuang},
+  year   = {2026},
+  note   = {Paper link forthcoming}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ==== 页脚 ==== -->
+<footer class="footer">
+  <div style="font-weight:700; color:#1a1c20; margin-bottom:.55rem;">字节跳动 Seed × 香港大学</div>
+  <div class="small">
+    © 2026 字节跳动 Seed 与香港大学。
+    <br>
+    页面设计沿用 Cola 项目主页。
+  </div>
+</footer>
+
+<button class="back-to-top" aria-label="返回顶部">
+  <svg viewBox="0 0 24 24"><polyline points="6 14 12 8 18 14"/></svg>
+</button>
+
+<script src="../static/js/index.js"></script>
+</body>
+</html>
