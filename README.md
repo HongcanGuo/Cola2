@@ -40,6 +40,4 @@ The `ref/` directory can be removed without affecting either language version.
 
 ## Add links later
 
-The arXiv, Code, and Model controls use the original page's disabled-link pattern. When links are ready, update each corresponding `<a class="btn is-soft" href="#">`: replace `#` with the URL, remove `is-soft`, and remove its `coming-soon-badge`.
-
-Also replace `note = {Paper link forthcoming}` in the BibTeX block with the final venue or arXiv metadata.
+The arXiv control links to the published preprint. The Code and Model controls still use the original page's disabled-link pattern. When those links are ready, update each corresponding `<a class="btn is-soft" href="#">`: replace `#` with the URL, remove `is-soft`, and remove its `coming-soon-badge`.
