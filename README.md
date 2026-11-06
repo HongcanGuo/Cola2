@@ -38,6 +38,6 @@ Then open:
 
 The `ref/` directory can be removed without affecting either language version.
 
-## Add links later
+## External resources
 
-The arXiv and Code controls link to their published resources. The Model control still uses the original page's disabled-link pattern. When its link is ready, replace `#` with the URL, remove `is-soft`, and remove its `coming-soon-badge`.
+The Paper, arXiv, Code, and Model controls all link to their published resources.
